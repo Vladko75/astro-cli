@@ -109,5 +109,14 @@ var cities = map[string][2]float64{
 	"siem reap":     {13.3670, 103.8452},
 	"mandalay":      {21.9588, 96.0853},
 	"naypyidaw":     {19.8183, 96.1921},
+	// Polar regions
+	"north pole":    {90.0, 0.0},
+	"south pole":    {-90.0, 0.0},
+	"mcmurdo station": {-77.85, 166.67},
+	"alert":         {82.5, -62.3},
+	"thule":         {76.53, -68.7},
+	"barrow":        {71.29, -156.79},
+	"longyearbyen":  {78.22, 15.63},
+	"tromso":        {69.65, 18.96},
 }
 

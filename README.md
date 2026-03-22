@@ -7,7 +7,7 @@ A Go command-line tool for astronomical information: current time, moon phase/al
 - Display current local time for a location
 - Moon phase, illumination percentage, and altitude above horizon
 - List of planets visible above the horizon with their altitudes
-- Support for top 100 cities by population or custom coordinates
+- Support for top 100 cities by population, polar regions, or custom coordinates
 - Custom time input (default: now)
 - Selective output (time, moon, planets, or all)
 
@@ -51,6 +51,11 @@ go build -o astro .
 - London, planets at specific time:
   ```bash
   ./astro --city=london --show=planets --time=2026-03-22T20:00:00Z
+  ```
+
+- North Pole, moon info:
+  ```bash
+  ./astro --city="north pole" --show=moon
   ```
 
 - Custom location (New York), specific time, moon only:
