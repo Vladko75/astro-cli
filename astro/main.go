@@ -121,16 +121,16 @@ func showPlanetsInfo(w io.Writer, cityName string, description string, lat, lon 
 	planets := planetsAboveHorizon(lat, lon, t)
 	if len(planets) == 0 {
 		if description != "" {
-			fmt.Fprintf(w, "Над горизонтом в %s (%s) сейчас нет известных планет (по приближённым расчётам).\n", cityName, description)
+			fmt.Fprintf(w, "No known planets above the horizon in %s (%s) (based on approximate calculations).\n", cityName, description)
 		} else {
-			fmt.Fprintf(w, "Над горизонтом в данной локации (%.4f, %.4f) сейчас нет известных планет (по приближённым расчётам).\n", lat, lon)
+			fmt.Fprintf(w, "No known planets above the horizon at this location (%.4f, %.4f) (based on approximate calculations).\n", lat, lon)
 		}
 		return
 	}
 	if description != "" {
-		fmt.Fprintf(w, "Планеты над горизонтом в %s (%s):\n", cityName, description)
+		fmt.Fprintf(w, "Planets above the horizon in %s (%s):\n", cityName, description)
 	} else {
-		fmt.Fprintf(w, "Планеты над горизонтом в локации (%.4f, %.4f):\n", lat, lon)
+		fmt.Fprintf(w, "Planets above the horizon at location (%.4f, %.4f):\n", lat, lon)
 	}
 	for _, p := range planets {
 		fmt.Fprintf(w, " - %s: %.2f°\n", p.Name, p.Altitude)
