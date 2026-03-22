@@ -78,8 +78,7 @@ func SunTimes(t time.Time, latDeg, lonDeg float64) SunInfo {
 
 	// Approximate sunrise using noon
 	noonJD := math.Floor(JD) + 0.5 - lonDeg/360.0
-	_ = noonJD // Use unused variable
-
+	_ = noonJD
 	// Refraction + horizon dip
 	refraction := 0.833 // degrees
 	horizon := -refraction - 2.076*math.Sqrt(math.Max(0, 0))/(60*math.Pi/180) // simplified

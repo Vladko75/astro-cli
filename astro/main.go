@@ -50,8 +50,8 @@ func main() {
 
 	// Parse show options
 	showOptions := make(map[string]bool)
-	for _, opt := range strings.Split(*showFlag, ",") {
-		showOptions[strings.TrimSpace(strings.ToLower(opt))] = true
+	validShowOptions := map[string]bool{
+		"time": true, "moon": true, "planets": true, "sun": true, "stars": true,
 	}
 	if *showFlag == "all" {
 		showOptions["time"] = true
@@ -59,6 +59,18 @@ func main() {
 		showOptions["planets"] = true
 		showOptions["sun"] = true
 		showOptions["stars"] = false // stars not shown by default
+	} else {
+		for _, opt := range strings.Split(*showFlag, ",") {
+			trimmed := strings.TrimSpace(strings.ToLower(opt))
+			if trimmed == "" {
+				continue
+			}
+			if !validShowOptions[trimmed] {
+				fmt.Printf("Error: Invalid show option '%s'. Valid options: time, moon, planets, sun, stars\n", trimmed)
+				os.Exit(1)
+			}
+			showOptions[trimmed] = true
+		}
 	}
 
 	// Determine location and get timezone
@@ -75,8 +87,8 @@ func main() {
 			tz = loc.Timezone
 			cityName = strings.Title(city)
 		} else {
-			fmt.Printf("Unknown city: %s\n", *cityFlag)
-			return
+			fmt.Printf("Error: Unknown city: %s\n", *cityFlag)
+			os.Exit(1)
 		}
 	} else if *latFlag != 0 || *lonFlag != 0 {
 		lat, lon = *latFlag, *lonFlag
@@ -97,8 +109,8 @@ func main() {
 		var err error
 		t, err = time.Parse(time.RFC3339, *timeFlag)
 		if err != nil {
-			fmt.Printf("Invalid time format: %s\n", *timeFlag)
-			return
+			fmt.Printf("Error: Invalid time format: %s\n", *timeFlag)
+			os.Exit(1)
 		}
 	} else {
 		t = time.Now()

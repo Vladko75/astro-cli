@@ -1,6 +1,10 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"os"
+	"time"
+)
 
 // Location holds coordinates, description, and timezone for a place
 type Location struct {
@@ -137,6 +141,7 @@ func getTimezone(tz string) *time.Location {
 	}
 	loc, err := time.LoadLocation(tz)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: Timezone '%s' not found, using UTC\n", tz)
 		return time.UTC
 	}
 	return loc
