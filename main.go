@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	cityFlag     = flag.String("city", "", "City name (marmaris or moscow)")
+	cityFlag     = flag.String("city", "", "City name (e.g., tokyo, london, etc.)")
 	latFlag      = flag.Float64("lat", 0, "Latitude in degrees")
 	lonFlag      = flag.Float64("lon", 0, "Longitude in degrees")
 	timeFlag     = flag.String("time", "", "Time in RFC3339 format (e.g., 2026-03-22T12:00:00Z), default is now")
@@ -35,14 +35,11 @@ func main() {
 	var lat, lon float64
 	var cityName string
 	if *cityFlag != "" {
-		switch strings.ToLower(*cityFlag) {
-		case "marmaris":
-			lat, lon = marmarisLat, marmarisLon
-			cityName = "Marmaris, Turkey"
-		case "moscow":
-			lat, lon = moscowLat, moscowLon
-			cityName = "Moscow, Russia"
-		default:
+		city := strings.ToLower(*cityFlag)
+		if coords, ok := cities[city]; ok {
+			lat, lon = coords[0], coords[1]
+			cityName = strings.Title(city)
+		} else {
 			fmt.Printf("Unknown city: %s\n", *cityFlag)
 			return
 		}
@@ -51,8 +48,8 @@ func main() {
 		cityName = fmt.Sprintf("Custom location (%.4f, %.4f)", lat, lon)
 	} else {
 		// Default to Marmaris
-		lat, lon = marmarisLat, marmarisLon
-		cityName = "Marmaris, Turkey"
+		lat, lon = cities["marmaris"][0], cities["marmaris"][1]
+		cityName = "Marmaris"
 	}
 
 	// Determine time
