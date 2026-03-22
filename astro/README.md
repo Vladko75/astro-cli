@@ -117,5 +117,21 @@ Run with coverage:
 go test -cover .
 ```
 
-**Current coverage: 66.0%** (comprehensive test suite covering astronomical calculations, data extraction, output functions, and edge cases across various locations and times).</content>
+**Current coverage: 66.0%** (comprehensive test suite covering astronomical calculations, data extraction, output functions, and edge cases across various locations and times).
+
+## Security
+
+This project prioritizes security with the following features and practices:
+
+- **No external dependencies** - Zero supply chain risk
+- **Input validation** - All user inputs validated:
+  - Coordinates: -90° to 90° latitude, -180° to 180° longitude
+  - Time: RFC3339 format validation
+  - City names: Whitelist of 100+ cities and polar regions
+  - Show options: Validation against allowed values (time, moon, planets, sun, stars)
+- **Safe operations** - No file I/O, no command execution, no shell injection risks
+- **Proper error handling** - Consistent error codes and messages
+- **Public data only** - No sensitive information exposure
+
+For detailed security analysis, see [SECURITY_ANALYSIS.md](SECURITY_ANALYSIS.md).</content>
 <parameter name="filePath">/home/haver/vscode-t1/README.md
