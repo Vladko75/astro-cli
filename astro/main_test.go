@@ -1,28 +1,38 @@
 package main
 
 import (
-	"bytes"
 	"strings"
 	"testing"
 	"time"
 )
 
-func TestShowCurrentTime(t *testing.T) {
-	var buf bytes.Buffer
+func TestGetCurrentTimeData(t *testing.T) {
+	// Disable colors for consistent test output
+	*noColorFlag = true
+	defer func() { *noColorFlag = false }()
+	
 	testTime := time.Date(2026, 3, 22, 12, 0, 0, 0, time.UTC)
-	showCurrentTime(&buf, "Marmaris, Turkey", "A coastal town in Turkey", testTime)
-	output := buf.String()
-	if !strings.Contains(output, "Current time in Marmaris, Turkey") {
+	data, output := getCurrentTimeData("Europe/Istanbul", "Marmaris", "A coastal town in Turkey", testTime)
+	
+	if data["timezone"] != "Europe/Istanbul" {
+		t.Errorf("Timezone not set correctly: %v", data["timezone"])
+	}
+	if !strings.Contains(output, "Current time in Marmaris") {
 		t.Errorf("Output does not contain expected text: %s", output)
 	}
 }
 
-func TestShowMoonInfo(t *testing.T) {
-	var buf bytes.Buffer
+func TestGetMoonData(t *testing.T) {
+	*noColorFlag = true
+	defer func() { *noColorFlag = false }()
+	
 	testTime := time.Date(2026, 3, 22, 12, 0, 0, 0, time.UTC)
-	showMoonInfo(&buf, "Marmaris, Turkey", "A coastal town in Turkey", 36.8529, 28.2744, testTime)
-	output := buf.String()
-	if !strings.Contains(output, "Moon phase in Marmaris, Turkey") {
+	data, output := getMoonData("Marmaris", "A coastal town in Turkey", 36.8529, 28.2744, testTime)
+	
+	if data["phase"] == nil {
+		t.Errorf("Moon phase data missing: %v", data)
+	}
+	if !strings.Contains(output, "Moon phase in Marmaris") {
 		t.Errorf("Output does not contain expected text: %s", output)
 	}
 	if !strings.Contains(output, "illumination") {
@@ -30,23 +40,28 @@ func TestShowMoonInfo(t *testing.T) {
 	}
 }
 
-func TestShowCurrentTimeMoscow(t *testing.T) {
-	var buf bytes.Buffer
+func TestGetCurrentTimeDataMoscow(t *testing.T) {
+	*noColorFlag = true
+	defer func() { *noColorFlag = false }()
+	
 	testTime := time.Date(2026, 3, 22, 12, 0, 0, 0, time.UTC)
-	showCurrentTime(&buf, "Moscow, Russia", "Capital of Russia", testTime)
-	output := buf.String()
-	if !strings.Contains(output, "Current time in Moscow, Russia") {
+	_, output := getCurrentTimeData("Europe/Moscow", "Moscow", "Capital of Russia", testTime)
+	
+	if !strings.Contains(output, "Current time in Moscow") {
 		t.Errorf("Output does not contain expected text: %s", output)
 	}
 }
 
-func TestShowPlanetsInfoNoPlanets(t *testing.T) {
-	var buf bytes.Buffer
-	// Use a time/location where no planets are visible, e.g., night time or polar
-	testTime := time.Date(2026, 3, 22, 0, 0, 0, 0, time.UTC) // Midnight
-	showPlanetsInfo(&buf, "South Pole", "Southernmost point on Earth", -90, 0, testTime) // South pole, might have no planets
-	output := buf.String()
-	// Depending on calculation, may or may not have planets, but test the output format
+func TestGetPlanetsData(t *testing.T) {
+	*noColorFlag = true
+	defer func() { *noColorFlag = false }()
+	
+	testTime := time.Date(2026, 3, 22, 0, 0, 0, 0, time.UTC)
+	data, output := getPlanetsData("South Pole", "Southernmost point on Earth", -90, 0, testTime)
+	
+	if data["count"] == nil {
+		t.Errorf("Planet count missing: %v", data)
+	}
 	if !strings.Contains(output, "South Pole") {
 		t.Errorf("Output does not contain location text: %s", output)
 	}
